@@ -2,7 +2,7 @@ import string
 import random
 
 def _type(project_name: str):
-    with open('/home/skilldev/Desktop/python_my_framework/setup/default/conf/settings.py', 'r') as file:
+    with open('/home/skilldev/Desktop/devvapi/setup/default/conf/settings.py', 'r') as file:
         code = file.read()
 
         symbols = [letter for letter in string.ascii_letters]
