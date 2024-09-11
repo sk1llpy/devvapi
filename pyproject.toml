@@ -1,6 +1,6 @@
 [project]
 name = "devvapi"
-version = "1.2.0"
+version = "1.2.2"
 authors = [
   { name="Abdulloh", email="abdullohnugmonovone222@gmail.com" },
 ]
@@ -18,4 +18,4 @@ Homepage = "https://github.com/sk1llpy/devvapi"
 Issues = "https://github.com/sk1llpy/devvapi/issues"
 
 [project.scripts]
-devvapi-admin = "src.devvapi.setup.devvapi:main"
+devvapi-admin = "devvapi.setup.devvapi:main"

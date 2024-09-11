@@ -3,10 +3,8 @@
 import argparse
 import os
 
-import _dirs
-import _write
-import _write.app
-import _write.manage
+from . import _dirs
+from . import _write
 
 
 def startproject(project_name):
