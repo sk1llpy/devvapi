@@ -1,9 +1,13 @@
 import string
 import random
+import requests
 
 def _type(project_name: str):
-    with open('/home/skilldev/Desktop/devvapi/setup/default/conf/settings.py', 'r') as file:
-        code = file.read()
+    file_url = 'https://raw.githubusercontent.com/sk1llpy/devvapi/prouction/src/devvapi/setup/default/conf/settings.py'
+    file = requests.get(url=file_url) 
+
+    if file.status_code == 200:
+        code = file.text
 
         symbols = [letter for letter in string.ascii_letters]
         symbols.extend([
