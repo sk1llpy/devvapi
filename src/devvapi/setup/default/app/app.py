@@ -1,4 +1,4 @@
-from devvapi import App, AppConfig
+from devvapi.apps.core import App, AppConfig
 
 # App Configuration
 class ___AppName___Config(AppConfig):

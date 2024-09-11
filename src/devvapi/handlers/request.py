@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse
 import json
+import requests
 import asyncio
 
 from ..conf.main import DevvAPI
@@ -20,27 +21,13 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            self.wfile.write(b"""
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Swagger UI</title>
-                    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
-                </head>
-                <body>
-                    <div id="swagger-ui"></div>
-                    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
-                    <script>
-                        window.onload = function() {
-                            const ui = SwaggerUIBundle({
-                                url: '/swagger.json',
-                                dom_id: '#swagger-ui',
-                            });
-                        };
-                    </script>
-                </body>
-                </html>
-            """)
+            swagger_html__url = 'https://raw.githubusercontent.com/sk1llpy/devvapi/prouction/src/devvapi/setup/default/swagger/index.html'
+            swagger__html = requests.get(url=swagger_html__url)
+
+            try:
+                self.wfile.write(swagger__html.text.encode('utf-8'))
+            except:
+                self.wfile.write(b"""<h1>Error on Swagger!</h1>""")
         else:
             handler, path_params = self.api.find_handler('GET', parsed_path.path)
             if handler:

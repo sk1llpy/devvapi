@@ -5,7 +5,6 @@ import os
 
 import _dirs
 import _write
-import _write.lib
 import _write.app
 import _write.manage
 
@@ -16,7 +15,6 @@ def startproject(project_name):
     _write.settings._type(project_name)
     _write.apps._type(project_name)
     _write.manage._type(project_name)
-    _write.lib._type(project_name)
 
 
 def startapp(app_name):
@@ -76,4 +74,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-# To update code: chmod +x /home/skilldev/.local/bin/devvapi
