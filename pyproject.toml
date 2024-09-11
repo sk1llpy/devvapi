@@ -16,3 +16,6 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/sk1llpy/devvapi"
 Issues = "https://github.com/sk1llpy/devvapi/issues"
+
+[project.scripts]
+devvapi-admin = "src.devvapi.setup.devvapi:main"
