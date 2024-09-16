@@ -56,6 +56,13 @@ class DevvAPI:
 
     def post(self, path, description=""):
         return self.route(path, 'POST', description)
+    
+    def put(self, path, description=""):
+        return self.route(path, 'PUT', description)
+
+    def delete(self, path, description=""):
+        return self.route(path, 'DELETE', description)
+
 
     def route(self, path, method, description=""):
         def decorator(handler):
