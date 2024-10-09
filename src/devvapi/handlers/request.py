@@ -71,3 +71,13 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b'404 Not Found')
 
+    def do_PATCH(self):
+        parsed_path = urllib.parse.urlparse(self.path)
+        handler, path_params = self.api.find_handler('PATCH', parsed_path.path)
+        if handler:
+            asyncio.run(self.api.handle_request(handler, self, path_params))
+        else:
+            self.send_response(404)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(b'404 Not Found')

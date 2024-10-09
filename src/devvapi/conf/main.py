@@ -2,6 +2,13 @@ import inspect
 import json
 from ..apps.core import App, AppConfig
 
+class UsersRequest:
+    user_id: int = ...
+    name: str = ...
+
+
+def Body(instance):
+    return {}
 
 class DevvAPI:
     def __init__(self):
@@ -31,6 +38,7 @@ class DevvAPI:
 
                 self.swagger_docs["paths"][path][method.lower()] = {
                     "summary": route_info["description"],
+                    "parameters": route_info["parameters"],
                     "responses": {
                         "200": {
                             "description": "Successful response"
@@ -38,12 +46,13 @@ class DevvAPI:
                     }
                 }
 
-    def add_route(self, path, method, handler, description=""):
-        self.router.add_route(path, method, handler, description)
+    def add_route(self, path, method, handler, description="", parameters=None):
+        self.router.add_route(path, method, handler, description, parameters)
         if path not in self.swagger_docs["paths"]:
             self.swagger_docs["paths"][path] = {}
         self.swagger_docs["paths"][path][method.lower()] = {
             "summary": description,
+            "parameters": parameters,
             "responses": {
                 "200": {
                     "description": "Successful response"
@@ -54,7 +63,7 @@ class DevvAPI:
     def get(self, path, description=""):
         return self.route(path, 'GET', description)
 
-    def post(self, path, description=""):
+    def post(self, path, description="", **kwargs):
         return self.route(path, 'POST', description)
     
     def put(self, path, description=""):
@@ -63,6 +72,8 @@ class DevvAPI:
     def delete(self, path, description=""):
         return self.route(path, 'DELETE', description)
 
+    def patch(self, path, description=""):
+        return self.route(path, 'PATCH', description)
 
     def route(self, path, method, description=""):
         def decorator(handler):

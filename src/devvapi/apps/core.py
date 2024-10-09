@@ -1,5 +1,31 @@
 import re
 
+class BodyInstance(object):
+    def __init__(self, swagger) -> None:
+        self.swagger = swagger
+
+def Body(instance: object) -> BodyInstance:
+    swagger_field_types = {
+        str: "string",
+        int: "integer"
+    }
+
+    swagger = []    
+    for name, field_type in instance.__annotations__.items():
+        swagger.append(
+            {
+                "name": f"{name}",
+                "in": "path",
+                "description": "The ID of the user",
+                "required": True,
+                "schema": {
+                    "type": swagger_field_types[field_type]
+                }
+            },
+        )
+    
+    return BodyInstance(swagger)
+
 class AppConfig:
     path = None
     name = None
@@ -10,7 +36,7 @@ class App:
         self.app_config = app_config
         self.routes = {}
 
-    def add_route(self, path, method, handler, description=""):
+    def add_route(self, path, method, handler, description="", parameters: BodyInstance = None):
         full_path = f"/v{self.app_config.version}{self.app_config.path}{path}"
 
         path_pattern = re.sub(r'{(\w+)}', r'(?P<>[^/]+)', full_path)
@@ -19,13 +45,13 @@ class App:
         if path_regex not in self.routes:
             self.routes[path_regex] = {}
 
-        self.routes[path_regex][method.upper()] = {"handler": handler, "description": description, "path": full_path}
+        self.routes[path_regex][method.upper()] = {"handler": handler, "description": description, "path": full_path, 'parameters': parameters}
 
     def get(self, path, description=""):
         return self.route(path, 'GET', description)
 
-    def post(self, path, description=""):
-        return self.route(path, 'POST', description)
+    def post(self, path, description="", parameters: BodyInstance = None):
+        return self.route(path, 'POST', description, parameters)
 
     def put(self, path, description=""):
         return self.route(path, 'PUT', description)
@@ -33,9 +59,12 @@ class App:
     def delete(self, path, description=""):
         return self.route(path, 'DELETE', description)
 
-    def route(self, path, method, description=""):
+    def patch(self, path, description=""):
+        return self.route(path, 'PATCH', description)
+
+    def route(self, path, method, description="", parameters: BodyInstance = None):
         def decorator(handler):
-            self.add_route(path, method, handler, description)
+            self.add_route(path, method, handler, description, parameters)
             return handler
         return decorator
 
